@@ -1,19 +1,29 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+// Components
+import { MenuComponent } from './layout/menu/menu.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
+  // route login
+  { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
   {
-    path: 'home',
-    loadChildren: './home/home.module#HomePageModule'
-  },
-  {
-    path: 'list',
-    loadChildren: './list/list.module#ListPageModule'
+    path: '',
+    component: MenuComponent,
+    children: [
+      // route admin
+      { path: 'dashboard', loadChildren: './admin/dashboard/dashboard.module#DashboardPageModule' },
+      // route director
+      { path: 'dashboard', loadChildren: './manager/dashboard/dashboard.module#DashboardPageModule' },
+      // route manager
+      { path: 'dashboard', loadChildren: './director/dashboard/dashboard.module#DashboardPageModule' },
+      // route agent
+      { path: 'dashboard', loadChildren: './agent/dashboard/dashboard.module#DashboardPageModule' },
+    ]
   }
 ];
 

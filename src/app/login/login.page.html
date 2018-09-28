@@ -1,0 +1,16 @@
+<ion-content class="login-container" padding>
+  <form [formGroup]="loginForm" (submit)="doLogin()">
+    <ion-item>
+      <ion-icon name="mail" item-start class="text-primary"></ion-icon>
+      <ion-input formControlName="email" type="email" placeholder="  Votre email"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="lock" item-start class="text-primary"></ion-icon>
+      <ion-input formControlName="password" type="password" placeholder="  Votre mot de passe"></ion-input>
+    </ion-item>
+    <ion-button color="secondary" expand="full" type="submit">
+      C'est parti !
+    </ion-button>
+  </form>
+  <p text-right ion-text white tappable><strong>Mot de passe oublié ?</strong></p>
+</ion-content>
