@@ -1,5 +1,7 @@
 {
   "name": "Reva_ionic4",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
