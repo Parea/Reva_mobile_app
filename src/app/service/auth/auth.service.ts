@@ -31,7 +31,6 @@ export class AuthService {
   public logout(): Promise<any> {
     return this.storage.getItem('user').then((user: any) => {
       const headers: HttpHeaders = new HttpHeaders({
-        'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer ' + user.token
       });
@@ -50,6 +49,6 @@ export class AuthService {
   public getAuth(): Promise<any> {
     return this.storage.getItem('user')
     .then(user => user)
-    .catch(e => console.log('Erreur Stockage getAuth user', e));
+    .catch(e => console.log('Erreur getAuth stockage user', e));
   }
 }

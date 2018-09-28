@@ -4,11 +4,11 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 export const environment = {
   production: false,
-  apiUrl: 'http://reva.tnt.local/api/',
-  appUrl: 'http://reva.tnt.local/',
-  appImageUrl: 'http://reva.tnt.local/public/uploads/images/',
-  appLogoUrl: 'http://reva.tnt.local/public/uploads/logos/',
-  appCalendarUrl: 'http://reva.tnt.local/public/uploads/calendars/',
+  apiUrl: 'http://172.16.3.15/api/',
+  appUrl: 'http://172.16.3.15/',
+  appImageUrl: 'http://172.16.3.15/public/uploads/images/',
+  appLogoUrl: 'http://172.16.3.15/public/uploads/logos/',
+  appCalendarUrl: 'http://172.16.3.15/public/uploads/calendars/',
 };
 
 /*

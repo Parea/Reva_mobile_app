@@ -22,10 +22,9 @@ export class ApiService {
         headers: new HttpHeaders({
           'Accept': 'application/json',
           'Authorization': 'Bearer ' + resp.token,
-          'Content-Type': 'application/json'
         })
       };
-    }).catch(e => console.log('Error setting httpOptions: ', e));
+    }).catch(e => console.log('Erreur setting httpOptions: ', e));
   }
 
   public get(url): Promise<any> {
@@ -36,7 +35,7 @@ export class ApiService {
           console.log('data get: ', resp);
           resolve(resp);
         }, e => console.log(e));
-      }).catch(e => console.log('Error "get" data: ', e));
+      }).catch(e => console.log('Erreur "get" data: ', e));
     });
   }
 
@@ -45,7 +44,7 @@ export class ApiService {
       this.setHeaders().then(() => {
         this.http.put(_API_URL + url, data, this.options)
         .subscribe(resp => resolve(resp), e => console.log(e));
-      }).catch(e => console.log('Error "put" data: ', e));
+      }).catch(e => console.log('Erreur "put" data: ', e));
     });
   }
 
@@ -54,7 +53,7 @@ export class ApiService {
       this.setHeaders().then(() => {
         this.http.post(_API_URL + url, data, this.options)
         .subscribe(resp => resolve(resp), e => console.log(e));
-      }).catch(e => console.log('Error "post" data: ', e));
+      }).catch(e => console.log('Erreur "post" data: ', e));
     });
   }
 }
