@@ -32,7 +32,8 @@ export class AuthService {
     return this.storage.getItem('user').then((user: any) => {
       const headers: HttpHeaders = new HttpHeaders({
         'Accept': 'application/json',
-        'Authorization': 'Bearer ' + user.token
+        'Authorization': 'Bearer ' + user.token,
+        'Content-Type': 'application/json'
       });
       return this.http.get(_API_URL + 'logout', { headers: headers }).toPromise().then((resp: any) => {
         this.storage.remove('user')

@@ -22,6 +22,7 @@ export class ApiService {
         headers: new HttpHeaders({
           'Accept': 'application/json',
           'Authorization': 'Bearer ' + resp.token,
+          'Content-Type': 'application/json'
         })
       };
     }).catch(e => console.log('Erreur setting httpOptions: ', e));

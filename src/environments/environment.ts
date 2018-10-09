@@ -6,9 +6,9 @@ export const environment = {
   production: false,
   apiUrl: 'http://172.16.3.15/api/',
   appUrl: 'http://172.16.3.15/',
-  appImageUrl: 'http://172.16.3.15/public/uploads/images/',
-  appLogoUrl: 'http://172.16.3.15/public/uploads/logos/',
-  appCalendarUrl: 'http://172.16.3.15/public/uploads/calendars/',
+  appImageUrl: 'http://172.16.3.15/uploads/images/',
+  appLogoUrl: 'http://172.16.3.15/uploads/logos/',
+  appCalendarUrl: 'http://172.16.3.15/uploads/calendars/',
 };
 
 /*

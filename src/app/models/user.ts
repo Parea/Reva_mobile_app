@@ -3,13 +3,13 @@ export class User {
     lastName: any;
     firstName: any;
     fullName: any;
-    avatar: any;
     email: any;
-    gender: any;
-    birthDate: any;
-    phone: any;
-    token: any;
+    avatar: any;
     userTypeId: any;
+    gender: any;
+    token: any;
+    serviceId: any;
+    employeeId: any;
 
     constructor () {}
 }
