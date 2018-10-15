@@ -1,9 +1,21 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>dashboard</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-toggle>
+        <ion-button>
+          <ion-icon slot="icon-only" name="menu"></ion-icon>
+        </ion-button>
+      </ion-menu-toggle>
+    </ion-buttons>
+    <ion-title>Bienvenue {{ agent.firstName }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-
+  <div>
+    <img src= "{{ agent.avatar}}">
+  </div>
+  <div>
+    <h3>{{ agent.serviceName }}</h3>
+  </div>
 </ion-content>

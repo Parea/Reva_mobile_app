@@ -11,7 +11,7 @@ export class Agent extends User {
     services: Service[] = [];
 
     // tslint:disable-next-line:max-line-length
-    constructor (id?: any, lastName?: any, firstName?: any, avatar?: any, email?: any, gender?: any, token?: any, employeeId?: any, serviceId?: any) {
+    constructor (id?: any, lastName?: any, firstName?: any, avatar?: any, email?: any, gender?: any, token?: any, employeeId?: any, serviceId?: any, employee?: any) {
         super();
         this.id = id;
         this.lastName = lastName;
@@ -26,11 +26,10 @@ export class Agent extends User {
         this.serviceId = serviceId;
     }
 
-    public getServiceById(serviceId: any): Service {
-        return this.services[this.services.findIndex((service) => service.id === serviceId)];
-    }
-
     public addService(service: Service): void {
         this.services.push(service);
+    }
+    public getServiceById(serviceId: any): Service {
+        return this.services[this.services.findIndex((service) => service.id === serviceId)];
     }
 }

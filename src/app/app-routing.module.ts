@@ -16,13 +16,13 @@ const routes: Routes = [
     component: MenuComponent,
     children: [
       // route admin
-      { path: 'dashboard', loadChildren: './admin/dashboard/dashboard.module#DashboardPageModule' },
+      { path: 'admin/dashboard', loadChildren: './admin/dashboard/dashboard.module#DashboardPageModule' },
       // route director
-      { path: 'dashboard', loadChildren: './manager/dashboard/dashboard.module#DashboardPageModule' },
+      { path: 'director/dashboard', loadChildren: './director/dashboard/dashboard.module#DashboardPageModule' },
       // route manager
-      { path: 'dashboard', loadChildren: './director/dashboard/dashboard.module#DashboardPageModule' },
+      { path: 'manager/dashboard', loadChildren: './manager/dashboard/dashboard.module#DashboardPageModule' },
       // route agent
-      { path: 'dashboard', loadChildren: './agent/dashboard/dashboard.module#DashboardPageModule' },
+      { path: 'agent/dashboard', loadChildren: './agent/dashboard/dashboard.module#DashboardPageModule' },
     ]
   }
 ];

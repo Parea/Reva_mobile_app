@@ -11,8 +11,8 @@ import { AuthService } from './../service/auth/auth.service';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  private redirect = [null, '/director/dashboard', '/manager/dashboard', '/agent/dashboard'];
-  public loginForm: FormGroup;
+  redirect = [null, '/admin/dashboard', '/director/dashboard', '/manager/dashboard', '/agent/dashboard'];
+  loginForm: FormGroup;
 
   constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder) { }
 
@@ -22,7 +22,7 @@ export class LoginPage implements OnInit {
         this.router.navigate([this.redirect[user.user_type_id]]);
       }).catch(e => console.log('Erreur ngOnInit stockage user: ', e));
     }
-    this.loginForm = this.formBuilder.group({
+      this.loginForm = this.formBuilder.group({
       email: ['', Validators.required],
       password: ['', Validators.required]
     });

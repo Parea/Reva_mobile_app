@@ -9,6 +9,7 @@ import { ApiService } from '../../service/api/api.service';
 import { Agent } from '../../models/agent';
 import { Service } from '../../models/service';
 import { Employee } from '../../models/employee';
+import { Validated } from '../../models/validated';
 
 // Env
 import { environment } from './../../../environments/environment';
@@ -20,6 +21,7 @@ import { environment } from './../../../environments/environment';
 })
 export class DashboardPage implements OnInit {
   public agent: Agent;
+  public employee: Employee;
   public serviceSelected: Service;
   public environment = environment;
 
@@ -41,14 +43,14 @@ export class DashboardPage implements OnInit {
   private setServices(): void {
     this.apiServce.get('agentsService').then((resp: any) => {
       for (let i = 0; i < resp.length; i++) {
-        this.agent.addService(new Service(resp[i].id, resp[i].name, resp[i].total_managers, resp[i].total_agents));
+        this.agent.addService(new Service(resp[i].id, resp[i].name, resp[i].color));
       }
     }).then(() => this.showService())
     .catch(e => console.log('Erreur setting services: ', e));
   }
 
   private showService(): void {
-    this.setServiceSelected().then((resp: Service) => this.setTimeoffs(resp.id))
+    this.setServiceSelected().then((resp: Service) => this.setTimeoffs())
     .catch(e => console.log('Erreur showing service: ', e));
   }
 
@@ -59,14 +61,20 @@ export class DashboardPage implements OnInit {
     });
   }
 
-  private setTimeoffs(serviceId: any): void {
-    this.apiServce.get('employeeTimeoffbyservice/' + serviceId).then((resp: any) => {
+  private setTimeoffs(): void {
+    this.apiServce.get('mytimeoff').then((resp: any) => {
       let currentTimeoff: Employee;
+
       for (let i = 0; i < resp.length; i++) {
         // tslint:disable-next-line:max-line-length
-        currentTimeoff = new Employee(resp[i].employee_id, resp[i].Nom, resp[i].Prenom, resp[i].service, resp[i].Congées_obtenue, resp[i].Congées_en_cours, resp[i].Congées_pris, resp[i].Congées_restant, resp[i].TotalDemandeCongéesValider, resp[i].CongéesValider);
+        currentTimeoff = new Employee(resp[i].firstname, resp[i].lastname, resp[i].serviceName, resp[i].timeoffgranted, resp[i].timeoffprogress);
+        for (let j = 0; j < resp[i].timeoffvalidated.length; j++ ) {
+          // currentTimeoff(resp[i]timeoffvalidated[j].) // terminer 12/10/18
+        }
+        this.serviceSelected.addAgent(currentTimeoff);
       }
-      this.serviceSelected.addAgent(currentTimeoff);
+      console.log('currentTimeoff', currentTimeoff);
+      console.log('resp', resp);
     }).catch(e => console.log('Erreur setting timeoff: ', e));
   }
 }

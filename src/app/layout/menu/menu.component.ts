@@ -13,9 +13,6 @@ export class MenuComponent implements OnInit {
   private menus = [
     null,
     {
-      links: []
-    },
-    {
       links: [
         { title: 'Accueil', url: '/admin/dashboard', icon: 'home' },
       ]
@@ -44,12 +41,12 @@ export class MenuComponent implements OnInit {
     if (this.authService.isLogged()) {
       this.authService.getAuth().then((user: any) => {
         this.appPages = this.menus[user.user_type_id].links;
-      }).catch(e => console.log('Error init menu: ', e));
+      }).catch(e => console.log('Erreur init menu: ', e));
     }
   }
 
   public logout(): void {
     this.authService.logout().then(() => this.router.navigate(['/login']))
-    .catch(e => console.log('Error logout: ', e));
+    .catch(e => console.log('Erreur logout: ', e));
   }
 }

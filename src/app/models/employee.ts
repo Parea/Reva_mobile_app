@@ -3,38 +3,41 @@ import { ValidationTimeoff } from './validationtimeoff';
 import { Service } from './service';
 
 export class Employee extends User {
-    id: any;
     currentServiceId: any;
     Nom: any;
     Prenom: any;
     services: Service[] = [];
-    Congées_obtenue: any;
-    Congées_en_cours: any;
-    Congées_pris: any;
-    Congées_restant: any;
-    TotalDemandeCongéesValider: any;
-    CongéesValider: ValidationTimeoff[];
+    serviceName: any;
+    timeoffgranted: any;
+    timeoffnotvalidated: ValidationTimeoff[];
+    timeoffvalidated: ValidationTimeoff[];
+    timeoffprogress: any;
+    timeofftaken: any;
+    totaltimeoff: any;
+    totaltimeoffvalidated: any;
+    totaltimeoffnotvalidated: any;
     // tslint:disable-next-line:max-line-length
-    constructor(id?: any, lastName?: any, firstName?: any, services?: any, Congées_obtenue?: any, Congées_en_cours?: any, Congées_pris?: any, Congées_restant?: any, TotalDemandeCongéesValider?: any, CongéesValider?: any, currentServiceId?: any) {
+    constructor(lastName?: any, firstName?: any, services?: any, serviceName?: any, timeoffgranted?: any, timeoffprogress?: any, timeoffvalidated?: any, timeoffnotvalidated?: any, timeofftaken?: any, totaltimeoff?: any, totaltimeoffvalidated?: any, totaltimeoffnotvalidated?: any, currentServiceId?: any) {
         super();
-        this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
-        this.services = services;
-        this.Congées_obtenue = Congées_obtenue;
-        this.Congées_en_cours = Congées_en_cours;
-        this.Congées_pris = Congées_pris;
-        this.Congées_restant = Congées_restant;
-        this.TotalDemandeCongéesValider = TotalDemandeCongéesValider;
-        this.CongéesValider = CongéesValider;
+        this.serviceName = serviceName;
+        this.timeoffgranted = timeoffgranted;
+        this.timeoffprogress = timeoffprogress;
+        this.timeoffvalidated = timeoffvalidated;
+        this.timeoffnotvalidated = timeoffnotvalidated;
+        this.timeofftaken = timeofftaken;
+        this.totaltimeoff = totaltimeoff;
+        this.totaltimeoffvalidated = totaltimeoffvalidated;
+        this.totaltimeoffnotvalidated = totaltimeoffnotvalidated;
         this.currentServiceId = currentServiceId;
-    }
-
-    public getServiceById(serviceId: any): Service {
-        return this.services[this.services.findIndex((service) => service.id === serviceId)];
     }
 
     public addService(service: Service): void {
         this.services.push(service);
     }
+    public getServiceById(serviceId: any): Service {
+        return this.services[this.services.findIndex((service) => service.id === serviceId)];
+    }
+
 }
