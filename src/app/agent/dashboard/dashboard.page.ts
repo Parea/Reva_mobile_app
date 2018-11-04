@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Platform, MenuController  } from '@ionic/angular';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 // Services
 import { AuthService } from '../../service/auth/auth.service';
@@ -8,11 +9,10 @@ import { ApiService } from '../../service/api/api.service';
 // Models
 import { Agent } from '../../models/agent';
 import { Service } from '../../models/service';
-import { Employee } from '../../models/employee';
-import { Validated } from '../../models/validated';
 
 // Env
 import { environment } from './../../../environments/environment';
+import { ValidationTimeoff } from '../../models/validationtimeoff';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,60 +21,75 @@ import { environment } from './../../../environments/environment';
 })
 export class DashboardPage implements OnInit {
   public agent: Agent;
-  public employee: Employee;
   public serviceSelected: Service;
   public environment = environment;
+  TimeoffForm: FormGroup;
 
   // tslint:disable-next-line:max-line-length
-  constructor(private platform: Platform, private authService: AuthService, private apiServce: ApiService, public menuCtrl: MenuController) { }
+  constructor(private platform: Platform, private authService: AuthService, private apiService: ApiService, public menuCtrl: MenuController, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.platform.ready().then(() => this.setAgent());
-  }
+    this.platform.ready().then(() => { this.setAgent(); this.createTimeoff(); });
 
-  private setAgent(): void {
-    this.authService.getAuth().then((user: any) => {
-      // tslint:disable-next-line:max-line-length
-      this.agent = new Agent(null, user.lastname, user.firstname, user.avatar, user.email, user.gender, user.token, user.employee_id, user.service_id);
-    }).then(() => this.setServices())
-    .catch(e => console.log('Erreur setting agent: ', e));
-  }
-
-  private setServices(): void {
-    this.apiServce.get('agentsService').then((resp: any) => {
-      for (let i = 0; i < resp.length; i++) {
-        this.agent.addService(new Service(resp[i].id, resp[i].name, resp[i].color));
-      }
-    }).then(() => this.showService())
-    .catch(e => console.log('Erreur setting services: ', e));
-  }
-
-  private showService(): void {
-    this.setServiceSelected().then((resp: Service) => this.setTimeoffs())
-    .catch(e => console.log('Erreur showing service: ', e));
-  }
-
-  private setServiceSelected(): Promise<Service> {
-    return new Promise(resolve => {
-      // tslint:disable-next-line:max-line-length
-      resolve(this.serviceSelected = (!this.serviceSelected) ? this.agent.getServiceById(this.agent.currentServiceId) : this.serviceSelected);
+    this.TimeoffForm = this.formBuilder.group({
+      motif: ['', Validators.required],
+      start_timeoff: ['', Validators.required],
+      end_timeoff: ['', Validators.required],
+      numbers_days_taken: ['', Validators.required],
+      employee_id: ['', Validators.required],
+      manager_id: ['', Validators.required],
+      service_id: ['', Validators.required]
     });
   }
 
-  private setTimeoffs(): void {
-    this.apiServce.get('mytimeoff').then((resp: any) => {
-      let currentTimeoff: Employee;
+  private setAgent(): void {
+    this.authService.getAuth().then((data: any) => {
+      // tslint:disable-next-line:max-line-length
+      this.agent = new Agent(data.user_id, data.lastname, data.firstname, null, data.email, data.avatar);
+      console.log('setAgent', this.agent);
+    }).then(() => this.setTimeoffs())
+    .catch(e => console.log('Erreur setting agent: ', e));
+  }
 
-      for (let i = 0; i < resp.length; i++) {
-        // tslint:disable-next-line:max-line-length
-        currentTimeoff = new Employee(resp[i].firstname, resp[i].lastname, resp[i].serviceName, resp[i].timeoffgranted, resp[i].timeoffprogress);
-        for (let j = 0; j < resp[i].timeoffvalidated.length; j++ ) {
-          // currentTimeoff(resp[i]timeoffvalidated[j].) // terminer 12/10/18
-        }
-        this.serviceSelected.addAgent(currentTimeoff);
-      }
-      console.log('currentTimeoff', currentTimeoff);
+  private setTimeoffs(): void { // récupére les données de l'agent connecter
+    this.apiService.get('mytimeoff').then((resp: any) => {
       console.log('resp', resp);
+      this.agent.serviceName = resp['serviceName'];
+      this.agent.timeoffgranted = resp['timeoffgranted'];
+      this.agent.timeoffprogress = resp['timeoffprogress'];
+      this.agent.timeofftaken = resp['timeofftaken'];
+      this.agent.totaltimeoff = resp['totaltimeoff'];
+      this.agent.totaltimeoffnotvalidated = resp['totaltimeoffnotvalidated'];
+      this.agent.totaltimeoffvalidated = resp['totaltimeoffvalidated'];
+      const respValidated = resp['timeoffvalidated'];
+      for (let i = 0; i < respValidated.length; i++) {
+        // tslint:disable-next-line:max-line-length
+        this.agent.addValidation(new ValidationTimeoff(respValidated[i]['created_at'], respValidated[i]['employee_id'], respValidated[i]['end_timeoff'], respValidated[i]['id'], respValidated[i]['manager_id'], respValidated[i]['motif'], respValidated[i]['numbers_days_taken'], respValidated[i]['other_motif'], respValidated[i]['service_id'], respValidated[i]['start_timeoff'], respValidated[i]['updated_at'], respValidated[i]['validate'], respValidated[i]['validation_date']));
+      }
+      const respNotValidated = resp['timeoffnotvalidated'];
+      for (let i = 0; i < respNotValidated.length; i++) {
+        // tslint:disable-next-line:max-line-length
+        this.agent.addValidation(new ValidationTimeoff(respNotValidated[i]['created_at'], respNotValidated[i]['employee_id'], respNotValidated[i]['end_timeoff'], respNotValidated[i]['id'], respNotValidated[i]['manager_id'], respNotValidated[i]['motif'], respNotValidated[i]['numbers_days_taken'], respNotValidated[i]['other_motif'], respNotValidated[i]['service_id'], respNotValidated[i]['start_timeoff'], respNotValidated[i]['updated_at'], respNotValidated[i]['validate'], respNotValidated[i]['validation_date']));
+      }
     }).catch(e => console.log('Erreur setting timeoff: ', e));
+  }
+
+  get f() { return this.TimeoffForm.controls; }
+
+  public createTimeoff(): void {
+    if (this.TimeoffForm.invalid) {return; }
+    const dataForm = new FormData();
+    dataForm.append('motif', this.f.motif.value);
+    dataForm.append('start_timeoff', this.f.start_timeoff.value);
+    dataForm.append('end_timeoff', this.f.end_timeoff.value);
+    dataForm.append('numbers_days_taken', this.f.numbers_days_taken.value);
+    dataForm.append('employee_id', this.f.employee_id.value);
+    dataForm.append('manager_id', this.f.manager_id.value);
+    dataForm.append('service_id', this.f.service_id.value);
+
+    this.apiService.post('formtimeoff/create', dataForm).then((resp) => {
+      this.ngOnInit();
+      console.log('success post data', dataForm);
+    }).catch(e => console.log('Erreur post data: ', e));
   }
 }

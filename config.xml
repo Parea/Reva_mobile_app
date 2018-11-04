@@ -83,5 +83,6 @@
     <plugin name="cordova-plugin-ionic-webview" spec="^2.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <plugin name="cordova-plugin-nativestorage" spec="2.3.2" />
+    <allow-navigation href="http://192.168.1.107:8100" sessionid="8b950fe6" />
     <engine name="android" spec="7.1.1" />
 </widget>

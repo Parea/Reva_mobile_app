@@ -7,15 +7,101 @@
         </ion-button>
       </ion-menu-toggle>
     </ion-buttons>
-    <ion-title>Bienvenue {{ agent.firstName }}</ion-title>
+    <ion-title *ngIf="agent">Bienvenue sur reva </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding *ngIf="agent">
   <div>
-    <img src= "{{ agent.avatar}}">
+    <ion-card>
+      <img style="width: 250px; height: 250px;"src="{{ agent.avatar }}"/>
+      <ion-card-title>
+        {{ agent.lastName }} {{ agent.firstName }}
+      </ion-card-title>
+      <ion-card-content>
+        <h3>Vous êtes au {{ agent.serviceName }}</h3>
+        <h3>Vous avez {{ agent.timeoffgranted }} jours de congés restant</h3>
+        <h3> {{ agent.email }} </h3>
+      </ion-card-content>
+    </ion-card>
   </div>
+  <div *ngIf="agent.validations.length">
+    <h3>Vos demande de congés validée</h3>
+    <ion-card *ngFor='let validation of agent.validations'>
+      <ion-card-content *ngIf="validation.validate == 1">
+        <p>Du: {{ validation.startTimeoff | date:"dd-MM-yy hh:mm" }}</p>
+        <p>Au: {{ validation.endTimeoff | date:"dd-MM-yy hh:mm" }}</p>
+        <p>Nombre de jours: {{ validation.numbersTaken }}</p>
+        <p>Motif: {{ validation.motif }}</p>
+        <p>Validée le: {{ validation.validationDate | date:"dd-MM-yy" }}</p>
+      </ion-card-content>
+    </ion-card>
+
+    <h3>Vos demande de congés en cours de validation</h3>
+    <ion-card *ngFor='let validation of agent.validations'>
+      <ion-card-content *ngIf="validation.validate == 0">
+        <p>Du: {{ validation.startTimeoff | date:"dd-MM-yy hh:mm" }}</p>
+        <p>Au: {{ validation.endTimeoff | date:"dd-MM-yy hh:mm" }}</p>
+        <p>Nombre de jours: {{ validation.numbersTaken }}</p>
+        <p>Motif: {{ validation.motif }}</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  
   <div>
-    <h3>{{ agent.serviceName }}</h3>
+    <form [formGroup]="TimeoffForm">
+      <ion-list>
+        <ion-item>
+          <ion-label>Motif: </ion-label>
+          <ion-input formControlName="motif" required type="text" placeholder="Motif"></ion-input>
+        </ion-item>
+  
+        <ion-item>
+          <ion-label>Du: </ion-label>
+          <ion-datetime formControlName="start_timeoff" required displayFormat="YYYY-MM-DD" pickerFormat="YYYY-MM-DD"></ion-datetime>
+        </ion-item>
+  
+        <ion-item>
+          <ion-label>Au: </ion-label>
+          <ion-datetime formControlName="end_timeoff" required displayFormat="YYYY-MM-DD" pickerFormat="YYYY-MM-DD"></ion-datetime>
+        </ion-item>
+  
+        <ion-item>
+          <ion-label>Nombre de jours: </ion-label>
+          <ion-input formControlName="numbers_days_taken" repquired type="number" placeholder="nb de jours"></ion-input>
+        </ion-item>
+  
+        <ion-item>
+          <ion-label>Employé: </ion-label>
+          <ion-select formControlName="employee_id">
+            <ion-select-option value="3">ADAMS Roonui</ion-select-option>
+            <ion-select-option value="4">WAI Sandrine</ion-select-option>
+            <ion-select-option value="5">TAIE Taataparea</ion-select-option>
+            <ion-select-option value="6">ARUTAHI Mahealani</ion-select-option>
+          </ion-select>
+        </ion-item>
+  
+        <ion-item>
+          <ion-label>Responsable service: </ion-label>
+          <ion-select formControlName="employee_id">
+              <ion-select-option value="2">DUGUE Paul</ion-select-option>
+            <ion-select-option value="3">ADAMS Roonui</ion-select-option>
+            <ion-select-option value="4">WAI Sandrine</ion-select-option>
+          </ion-select>
+        </ion-item>
+  
+        <ion-item>
+          <ion-label>Service: </ion-label>
+          <ion-select formControlName="employee_id">
+            <ion-select-option value="1">Service comptabilité</ion-select-option>
+            <ion-select-option value="2">Service technique</ion-select-option>
+            <ion-select-option value="3">Service bureau d'études</ion-select-option>
+            <ion-select-option value="4">Service commercial</ion-select-option>
+            <ion-select-option value="5">Direction</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+      <ion-button (click)="createTimeoff()" color="secondary" expand="full" type="button">Demande de congé</ion-button>
+    </form>
   </div>
 </ion-content>

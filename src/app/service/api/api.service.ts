@@ -17,7 +17,9 @@ export class ApiService {
   constructor(private http: HttpClient, private storage: NativeStorage) { }
 
   private setHeaders(): Promise<void> {
+    // console.log('hello setHeaders');
     return this.storage.getItem('user').then((resp: any) => {
+      // console.log('resp setHeaders', resp);
       this.options = {
         headers: new HttpHeaders({
           'Accept': 'application/json',
@@ -29,8 +31,11 @@ export class ApiService {
   }
 
   public get(url): Promise<any> {
+    // console.log('hello apiservice');
     return new Promise(resolve => {
+      // console.log('resolve apiservice');
       this.setHeaders().then(() => {
+        // console.log('this.options', this.options);
         this.http.get(_API_URL + url, this.options)
         .subscribe(resp => {
           console.log('data get: ', resp);
